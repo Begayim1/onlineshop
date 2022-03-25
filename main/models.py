@@ -28,18 +28,15 @@ class Product(models.Model):
     # image = models.ImageField(blank=True, null=True, upload_to='products')
     status = models.CharField(choices=CHOICES, max_length=20)
     description = models.TextField(blank=True)
-    # price = models.DecimalField(max_digits=10, decimal_places=2)
-    stock = models.PositiveIntegerField()  # хранения остатков данного продукта
-    available = models.BooleanField(default=True)  # доступность товара
-    created = models.DateTimeField(auto_now_add=True)  # хранит дату когда был создан объект.
-    uploaded = models.DateTimeField(auto_now=True)  # время последнего обновления объекта
+    # stock = models.PositiveIntegerField()  # хранения остатков данного продукта
+    # available = models.BooleanField(default=True)  # доступность товара
+    # created = models.DateTimeField(auto_now_add=True)  # хранит дату когда был создан объект.
+    # uploaded = models.DateTimeField(auto_now=True)  # время последнего обновления объекта
     article = models.CharField(max_length=55)
-    # size = models.DecimalField(max_length=8, decimal_places=2)
     fabric = models.CharField(max_length=55, )
     material = models.CharField(max_length=55)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='category')
-    color = models.ManyToManyField(Color)
-
+    # color =
     class Meta:
         ordering = ('name',)
         verbose_name = 'Product'

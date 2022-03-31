@@ -8,6 +8,8 @@ admin.site.register(Product)
 admin.site.register(Image)
 admin.site.register(AboutUs)
 admin.site.register(ImageUs)
+admin.site.register(Collection)
+
 
 # class GalleryInline(admin.TabularInline):
 #     fk_name = 'product'

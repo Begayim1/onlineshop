@@ -2,7 +2,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from colorful.fields import RGBColorField
 
-            """Товары"""
+            # """Товары"""
 
 class Category(models.Model):
     name = models.CharField(max_length=55, unique=True)
@@ -77,7 +77,7 @@ class Image(models.Model):
             raise ValidationError('The number photos should not exceed 8')
 
 
-             """ О нас"""
+             # """ О нас"""""
 
 class AboutUs(models.Model):
     name = models.CharField(max_length=100)
@@ -98,7 +98,18 @@ class ImageUs(models.Model):
         if len(Image.objects.filter(product_id=self.about_us.pk)) >= 3:
             raise ValidationError('The number photos should not exceed 3')
 
+                       # """"Коллекция"""
 
+class Collection(models.Model):
+    name = models.CharField(max_length=55)
+    image = models.ImageField(upload_to='images/Y%/M%/H%',null=False)
+
+    class Meta:
+        verbose_name = 'Collection'
+        verbose_name_plural = 'Collections'
+
+    def __str__(self):
+        return self.name
 
 
 

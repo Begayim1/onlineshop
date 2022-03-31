@@ -6,6 +6,8 @@ admin.site.register(Category)
 admin.site.register(Color)
 admin.site.register(Product)
 admin.site.register(Image)
+admin.site.register(AboutUs)
+admin.site.register(ImageUs)
 
 # class GalleryInline(admin.TabularInline):
 #     fk_name = 'product'

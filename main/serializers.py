@@ -25,3 +25,14 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = ('id', 'title', 'article', 'color', 'price', 'old_price', 'size', 'fabric', 'material', 'quantity_in_line', 'description', 'image',)
 
+class ImageUsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ImageUs
+        fields = ('image',)
+
+class AboutUsSerializer(serializers.ModelSerializer):
+    image = ImageUsSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = AboutUs
+        fields = ('name', 'description', 'image',)

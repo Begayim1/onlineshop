@@ -9,5 +9,11 @@ class ProductListView(APIView):
         serializer = ProductSerializer(products, many = True)
         return Response(serializer.data)
 
+class AboutUsListView(APIView):
+    def get(self, request):
+        about_us = AboutUs.objects.all()
+        serializer = AboutUsSerializer(about_us, many=True)
+        return Response(serializer.data)
+
 
 

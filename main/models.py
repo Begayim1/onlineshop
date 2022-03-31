@@ -111,6 +111,15 @@ class Collection(models.Model):
     def __str__(self):
         return self.name
 
+            # """ Новости """
+
+class News(models.Model):
+    name = models.CharField(max_length=55)
+    description = models.TextField(blank=True, max_length=400)
+    image = models.ImageField(upload_to='images/Y%/M%/H%', null=False)
+
+
+
 
 
 

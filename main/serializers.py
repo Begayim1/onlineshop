@@ -42,3 +42,9 @@ class CollectionSerializer(serializers.ModelSerializer):
         model = Collection
         fields = ('id', 'name', 'image',)
 
+class NewsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = News
+        fields = ('id', 'name', 'description','image',)
+
+

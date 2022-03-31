@@ -26,7 +26,12 @@ class AboutUsListView(APIView):
 
 class CollectionListView(ModelViewSet):
     serializer_class = CollectionSerializer
-    queryset =  Collection.objects.all()
+    queryset = Collection.objects.all()
+    pagination_class = MyPaginationClass
+
+class NewsListView(ModelViewSet):
+    serializer_class = NewsSerializer
+    queryset = News.objects.all()
     pagination_class = MyPaginationClass
 
     # def get(self, request):

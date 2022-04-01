@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from colorful.fields import RGBColorField
+from ckeditor.fields import RichTextField
 
             # """Товары"""
 
@@ -41,7 +42,7 @@ class Color(models.Model):
 class Product(models.Model):
 
     title = models.CharField(max_length=100) #название
-    description = models.TextField(blank=True, max_length=400) #описание
+    description = RichTextField(blank=True, null=True, max_length=800) #описание
     # created = models.DateTimeField(default=True)  # хранит дату когда был создан объект.
     article = models.CharField(max_length=55) #артикл
     fabric = models.CharField(max_length=55, ) #cостав ткани
@@ -81,7 +82,7 @@ class Image(models.Model):
 
 class AboutUs(models.Model):
     name = models.CharField(max_length=100)
-    description = models.TextField(blank=True, max_length=2000)
+    description = RichTextField(blank=True, null=True, max_length=800)
 
     class Meta:
         verbose_name = 'AboutUs'
@@ -115,9 +116,15 @@ class Collection(models.Model):
 
 class News(models.Model):
     name = models.CharField(max_length=55)
-    description = models.TextField(blank=True, max_length=400)
+    description = RichTextField(blank=True, null=True, max_length=800)
     image = models.ImageField(upload_to='images/Y%/M%/H%', null=False)
 
+# """Наши преимущества"""
+
+class Advantages(models.Model):
+    name = models.CharField(max_length=55)
+    description = models.TextField(blank=True, null=True, max_length=800)
+    image = models.ImageField(upload_to='images/Y%/M%/H%', null=False)
 
 
 

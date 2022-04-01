@@ -10,6 +10,7 @@ admin.site.register(AboutUs)
 admin.site.register(ImageUs)
 admin.site.register(Collection)
 admin.site.register(News)
+admin.site.register(Advantages)
 
 
 # class GalleryInline(admin.TabularInline):

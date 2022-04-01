@@ -11,6 +11,11 @@ admin.site.register(ImageUs)
 admin.site.register(Collection)
 admin.site.register(News)
 admin.site.register(Advantages)
+admin.site.register(PublicOffer)
+admin.site.register(Help)
+admin.site.register(ImageHelp)
+
+
 
 
 # class GalleryInline(admin.TabularInline):

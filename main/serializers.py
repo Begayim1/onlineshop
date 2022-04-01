@@ -47,4 +47,30 @@ class NewsSerializer(serializers.ModelSerializer):
         model = News
         fields = ('id', 'name', 'description','image',)
 
+# class SimilarProductSerializer(serializers.ModelSerializer):
+#     image = ImageSerializer(read_only=True, many=True)
+#     size = serializers.SerializerMethodField()
+#     color = ColorSerializer(read_only=True, many=True)
+#     class Meta:
+#         model = Product
+#         fields = ('id', 'image', 'title', 'price', 'old_price', 'size', 'color', )
+
+
+class PublicOfferSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PublicOffer
+        fields = '__all__'
+
+class ImageHelpSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ImageHelp
+        fields = ('image',)
+
+class HelpSerializer(serializers.ModelSerializer):
+    image = ImageHelpSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = Help
+        fields = ('question', 'answer', 'image',)
+
 

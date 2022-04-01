@@ -127,6 +127,21 @@ class Advantages(models.Model):
     image = models.ImageField(upload_to='images/Y%/M%/H%', null=False)
 
 
+# """Публичная оферта"""
+
+class PublicOffer(models.Model):
+    name = models.CharField(max_length=55)
+    description = RichTextField(blank=True, null=True, max_length=800)
+
+# """Помощь"""
+
+class Help(models.Model):
+    question = models.CharField(max_length=55)
+    answer = models.CharField(max_length=150)
+
+class ImageHelp(models.Model):
+    image = models.ImageField()
+    help = models.ForeignKey(Help, on_delete=models.CASCADE, related_name='image')
 
 
 

@@ -1,9 +1,12 @@
+from django.http import Http404
+from rest_framework.decorators import api_view
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from .models import *
 from .serializers import *
 from rest_framework.response import Response
+from  rest_framework import filters
 
 class MyPaginationClass(PageNumberPagination):
     page_size = 2
@@ -40,19 +43,53 @@ class NewsListView(ModelViewSet):
     queryset = News.objects.all()
     pagination_class = MyPaginationClass
 
+# """похожие продукты"""
+@api_view(['GET'])
+def similar_product(request, pk):
+    category = Category.objects.get(id=pk)
+    queryset = Product.objects.all().filter(category=category)[0:5]
+    serializer = ProductSerializer(queryset, many=True)
+    return Response(serializer.data)
 
-class SimilarListView(APIView):
+@api_view(['GET'])
+def list_product(request, pk):
+    category = Category.objects.get(id=pk)
+    queryset = Product.objects.all().filter(category=category)[0:12]
+    serializer = ProductSerializer(queryset, many=True)
+    return Response(serializer.data)
 
-    def get(self, request, pk):
-        similar = Product.objects.filter(category__id=pk)
-        serializer = SimilarListView(similar, many=True)
-        return Response(serializer.data)
-    #     # similar = Product.objects.filter(category__id=self.kwargs.get('ct_id'))
-    #
-    def retrieve(self,request,pk):
-        similar = Product.objects.filter(category__id=pk)
-        serializer = SimilarListView(similar, many=True)
-        return Response(serializer.data)
+
+@api_view(['GET'])
+def new_product(request, pk):
+    category = Category.objects.get(id=pk)
+    queryset = Product.objects.all().filter(new=True)[0:5]
+    serializer = ProductSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+
+
+
+
+# class SimilarListView(APIView):
+#
+#     def get(self, request):
+#         product = Product.objects.all()
+#         serializer = SimilarListView(product[0:5], many=True)
+#         return Response(serializer.data)
+#
+#     def get_object(self, pk):
+#         try:
+#             product = Product.objects.filter(category__id=id)
+#             serializer = SimilarListView(product[0:5], many=True)
+#             return Response(serializer.data)
+#         except product.DoesNotExist:
+#             raise Http404
+        # similar = Product.objects.filter(category__id=self.kwargs.get('ct_id'))
+
+    # def retrieve(self,request,pk):
+    #     similar = Product.objects.filter(category__id=pk)
+    #     serializer = SimilarListView(similar, many=True)
+    #     return Response(serializer.data)
 
 
 class PublicOfferListView(ModelViewSet):

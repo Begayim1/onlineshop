@@ -18,25 +18,18 @@ class Category(models.Model):
         return self.name
 
 
-class Color(models.Model):
-    name = models.CharField(max_length=20)
-    color = RGBColorField()
 
-    def __str__(self):
-        return self.name
+
+class Size(models.Model):
+    size = models.CharField(max_length=20)
 
     class Meta:
-        verbose_name = 'Color'
-        verbose_name_plural = 'Colors'
+        verbose_name = 'Size'
+        verbose_name_plural = 'Sizes'
 
-# class Size(models.Model):
-#     size = models.CharField(max_length=20)
-#
-#     class Meta:
-#         ordering = ('size',)
-#
-#     def __str__(self):
-#         return self.size
+    def __str__(self):
+        return self.size
+
 
 
 class Product(models.Model):
@@ -50,32 +43,39 @@ class Product(models.Model):
     quantity_in_line = models.PositiveSmallIntegerField(default=0) #количество в линейке
     price = models.DecimalField(max_digits=5, decimal_places=2)
     old_price = models.PositiveIntegerField(null=True, blank=True) #старая цена
-    size = models.CharField(max_length=55)
-    color = models.ManyToManyField(Color, verbose_name=Color, related_name='product')
+    discount = models.IntegerField(null=True, blank=True)
+    size = models.ManyToManyField(Size, verbose_name=Size)
+    # color = models.ManyToManyField(Color, verbose_name=Color, related_name='product')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
     hit_of_sales = models.BooleanField(default=False) #хит продаж
     new = models.BooleanField(default=True) #новинки
+    favorite = models.BooleanField(default=True)
 
+    def discount(self):
+        if self.discount and self.old_price:
+            self.price = int(self.old_price * (100 - self.discount) / 100 )
 
-    # uploaded = models.DateTimeField(auto_now=True)  # время последнего обновления объекта
-    # stock = models.PositiveIntegerField()  # хранения остатков данного продукта
-    # available = models.BooleanField(default=True)  # доступность товара
+        else:
+            self.price = self.old_price
+            self.old_price = 0
 
     class Meta:
         verbose_name = 'Product'
         verbose_name_plural = 'Products'
 
 
-    def __str__(self):
-        return self.title
+        def __str__(self):
+            return self.title
+
+class Color(models.Model):
+    color = RGBColorField()
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Product', related_name='color')
+
 
 class Image(models.Model):
     image = models.ImageField()
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Product', related_name='image')
 
-    def clean(self):
-        if len(Image.objects.filter(product_id=self.product.pk)) >= 8:
-            raise ValidationError('The number photos should not exceed 8')
 
 
              # """ О нас"""""
@@ -95,9 +95,7 @@ class ImageUs(models.Model):
     image = models.ImageField()
     about_us = models.ForeignKey(AboutUs, on_delete=models.CASCADE, related_name='image')
 
-    def clean(self):
-        if len(Image.objects.filter(product_id=self.about_us.pk)) >= 3:
-            raise ValidationError('The number photos should not exceed 3')
+
 
                        # """"Коллекция"""
 
@@ -142,6 +140,22 @@ class Help(models.Model):
 class ImageHelp(models.Model):
     image = models.ImageField()
     help = models.ForeignKey(Help, on_delete=models.CASCADE, related_name='image')
+
+
+
+class Slider(models.Model):
+    image = models.ImageField(upload_to='images')
+    link = models.URLField(blank=True)
+
+# """Футер"""
+
+# class Footer(models.Model):
+#     logo = models.ImageField()
+#     description = models.TextField()
+#     num = models.NullBooleanField()
+#     type = models.
+
+
 
 
 

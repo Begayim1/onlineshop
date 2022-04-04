@@ -10,7 +10,7 @@ from .views import *
 router = DefaultRouter()
 router.register('collection', views.CollectionListView)
 router.register('news', views.NewsListView)
-router.register('products%20 ',views.ProductsListView)
+router.register('products',views.ProductsListView)
 router.register('public', views.PublicOfferListView)
 
 
@@ -18,7 +18,9 @@ urlpatterns = [
     path('product/', views.ProductListView.as_view(), name="products-list"),
     path('about/', views.AboutUsListView.as_view(), name="about_us-list"),
     path('help/', views.HelpListView.as_view(), name="help-list"),
-
+    path('similar_product/<pk>/', similar_product),
+    path('list_product/<pk>/', list_product),
+    path('new_product/<pk>/',new_product),
     # path('similar_products/<int:pk>/', SimilarListView.as_view(), name="similar-list"),
 
     # path('news/', views.NewsListView.as_view(), name="news-list"),

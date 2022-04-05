@@ -5,7 +5,6 @@ from .models import *
 admin.site.register(Category)
 admin.site.register(Color)
 admin.site.register(Size)
-admin.site.register(Product)
 admin.site.register(Image)
 admin.site.register(AboutUs)
 admin.site.register(ImageUs)
@@ -16,6 +15,10 @@ admin.site.register(PublicOffer)
 admin.site.register(Help)
 admin.site.register(ImageHelp)
 admin.site.register(Slider)
+admin.site.register(Type)
+admin.site.register(Footer)
+
+
 
 
 class ColorForPhoto(admin.TabularInline):
@@ -38,6 +41,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 
+admin.site.register(Product, ProductAdmin)
 
 
 # class GalleryInline(admin.TabularInline):

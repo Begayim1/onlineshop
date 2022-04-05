@@ -55,6 +55,10 @@ class AboutUsSerializer(serializers.ModelSerializer):
         model = AboutUs
         fields = ('name', 'description', 'image',)
 
+class AdvantagesSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Advantages
+        fields = '__all__'
 
 class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -88,3 +92,16 @@ class HelpSerializer(serializers.ModelSerializer):
     class Meta:
         model = Help
         fields = ('question', 'answer', 'image',)
+
+# """Футер"""
+
+class FooterSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Footer
+        fields = ('logo', 'description', 'num', 'type', 'number', 'message')
+
+class SliderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Slider
+        fields = '__all__'

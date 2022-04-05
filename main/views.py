@@ -12,6 +12,9 @@ class MyPaginationClass(PageNumberPagination):
     page_size = 2
     max_page_size = 3
 
+class MyPaginationOneClass(PageNumberPagination):
+    page_size = 2
+    max_page_size = 3
 
 class ProductListView(APIView):
     def get(self, request):
@@ -51,6 +54,7 @@ def similar_product(request, pk):
     serializer = ProductSerializer(queryset, many=True)
     return Response(serializer.data)
 
+# """Список товаров"""
 @api_view(['GET'])
 def list_product(request, pk):
     category = Category.objects.get(id=pk)
@@ -58,7 +62,7 @@ def list_product(request, pk):
     serializer = ProductSerializer(queryset, many=True)
     return Response(serializer.data)
 
-
+# """Новые Продукты со статусом"""
 @api_view(['GET'])
 def new_product(request, pk):
     category = Category.objects.get(id=pk)
@@ -66,30 +70,45 @@ def new_product(request, pk):
     serializer = ProductSerializer(queryset, many=True)
     return Response(serializer.data)
 
+# """Футер"""
+@api_view(['GET'])
+def footer(request):
+    obj = Footer.objects.all()
+    serializer = FooterSerializer(obj, many=True)
+    return Response(serializer.data)
+
+# """Хит Продаж со стат"""
+@api_view(['GET'])
+def hit_of_sales(request):
+    queryset = Product.objects.all().filter(hit_of_sales=True)[0:8]
+    serializer = ProductSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+# """Со статусом Новинки"""
+@api_view(['GET'])
+def new(request):
+    queryset = Product.objects.all().filter(new=True)[0:4]
+    serializer = ProductSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def collection(request):
+    queryset = Category.objects.all().filter()[0:4]
+    serializer = CategorySerializer(queryset, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def advantages(request):
+    queryset = Advantages.objects.all().filter()[0:4]
+    serializer = AdvantagesSerializers(queryset, many=True)
+    return Response(serializer.data)
 
 
+class SliderListView(ModelViewSet):
+    queryset = Slider.objects.all()
+    serializer_class = SliderSerializer
 
 
-# class SimilarListView(APIView):
-#
-#     def get(self, request):
-#         product = Product.objects.all()
-#         serializer = SimilarListView(product[0:5], many=True)
-#         return Response(serializer.data)
-#
-#     def get_object(self, pk):
-#         try:
-#             product = Product.objects.filter(category__id=id)
-#             serializer = SimilarListView(product[0:5], many=True)
-#             return Response(serializer.data)
-#         except product.DoesNotExist:
-#             raise Http404
-        # similar = Product.objects.filter(category__id=self.kwargs.get('ct_id'))
-
-    # def retrieve(self,request,pk):
-    #     similar = Product.objects.filter(category__id=pk)
-    #     serializer = SimilarListView(similar, many=True)
-    #     return Response(serializer.data)
 
 
 class PublicOfferListView(ModelViewSet):

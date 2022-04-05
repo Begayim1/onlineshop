@@ -41,7 +41,7 @@ class Product(models.Model):
     fabric = models.CharField(max_length=55, ) #cостав ткани
     material = models.CharField(max_length=55) #материал
     quantity_in_line = models.PositiveSmallIntegerField(default=0) #количество в линейке
-    price = models.DecimalField(max_digits=5, decimal_places=2)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     old_price = models.PositiveIntegerField(null=True, blank=True) #старая цена
     discount = models.IntegerField(null=True, blank=True)
     size = models.ManyToManyField(Size, verbose_name=Size)
@@ -50,6 +50,9 @@ class Product(models.Model):
     hit_of_sales = models.BooleanField(default=False) #хит продаж
     new = models.BooleanField(default=True) #новинки
     favorite = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.title
 
     def discount(self):
         if self.discount and self.old_price:
@@ -68,9 +71,12 @@ class Product(models.Model):
             return self.title
 
 class Color(models.Model):
+    name = models.CharField(max_length=55)
     color = RGBColorField()
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Product', related_name='color')
 
+    def __str__(self):
+        return self.name
 
 class Image(models.Model):
     image = models.ImageField()
@@ -117,12 +123,20 @@ class News(models.Model):
     description = RichTextField(blank=True, null=True, max_length=800)
     image = models.ImageField(upload_to='images/Y%/M%/H%', null=False)
 
+    def __str__(self):
+        return self.name
+
+
+
 # """Наши преимущества"""
 
 class Advantages(models.Model):
     name = models.CharField(max_length=55)
     description = models.TextField(blank=True, null=True, max_length=800)
     image = models.ImageField(upload_to='images/Y%/M%/H%', null=False)
+
+    def __str__(self):
+        return self.name
 
 
 # """Публичная оферта"""
@@ -131,11 +145,17 @@ class PublicOffer(models.Model):
     name = models.CharField(max_length=55)
     description = RichTextField(blank=True, null=True, max_length=800)
 
+    def __str__(self):
+        return self.name
+
 # """Помощь"""
 
 class Help(models.Model):
     question = models.CharField(max_length=55)
     answer = models.CharField(max_length=150)
+
+    def __str__(self):
+        return self.question
 
 class ImageHelp(models.Model):
     image = models.ImageField()
@@ -147,14 +167,48 @@ class Slider(models.Model):
     image = models.ImageField(upload_to='images')
     link = models.URLField(blank=True)
 
+
+
 # """Футер"""
+class Type(models.Model):
+    name = models.CharField(max_length=55, unique=True)
 
-# class Footer(models.Model):
-#     logo = models.ImageField()
-#     description = models.TextField()
-#     num = models.NullBooleanField()
-#     type = models.
+    def __str__(self):
+        return self.name
 
+class Footer(models.Model):
+    logo = models.ImageField(upload_to='images_f')
+    logo = models.ImageField(null=True, blank=True, upload_to='image_h')
+    description = models.TextField(max_length=200)
+    num = models.PositiveIntegerField()
+    type = models.ForeignKey(Type, on_delete=models.DO_NOTHING)
+    link = models.URLField(max_length=150, null=True, blank=True)
+    number = models.PositiveIntegerField()
+    message = models.CharField(max_length=55, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if self.type.name == 'WhatsApp':
+            self.link = f'https://wa.me/{self.number}/'
+        elif self.type.name == 'Telegram':
+            self.link = f'https://t.me/{self.number}/'
+        elif self.type.name == 'Instagram':
+            self.link = f'https://www.instagram.com/{self.message}/'
+        elif self.type.name == 'Mail':
+            self.link = f'https://mail.google.com/{self.message}/'
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.description
+
+#     logo = models.ImageField('Логотип', upload_to='images_footer')
+#     description = models.TextField('Текстовая информация', max_length=1500)
+#     num = models.PositiveIntegerField('Номер в хедере')
+#     type = models.CharField('Тип', max_length=100, choices=social_media)
+#     link = models.URLField('Ссылка')
+#     phone1 = models.CharField('Номера телефона 1' , max_length=20)
+#     phone2 = models.CharField('Номера телефона 2', max_length=20, blank=True)
+#     phone3 = models.CharField('Номера телефона 3', max_length=20, blank = True)
+#     gmail = models.CharField('Почта', max_length=100)
 
 
 

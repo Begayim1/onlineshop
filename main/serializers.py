@@ -105,3 +105,8 @@ class SliderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Slider
         fields = '__all__'
+
+class ReturnCallSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReturnCall
+        fields = ('status', 'num_user')

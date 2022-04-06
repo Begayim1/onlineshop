@@ -17,6 +17,10 @@ admin.site.register(ImageHelp)
 admin.site.register(Slider)
 admin.site.register(Type)
 admin.site.register(Footer)
+admin.site.register(ReturnCall)
+admin.site.register(ListOfReferences)
+
+
 
 
 

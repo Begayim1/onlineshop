@@ -11,6 +11,10 @@ class Order(models.Model):
     address = models.TextField()
     city = models.CharField(max_length=100)
     email = models.EmailField()
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
 
     class Meta:
         verbose_name = 'Заказ'
@@ -31,5 +35,7 @@ class OrderItem(models.Model):
     def __str__(self):
         return '{}'.format(self.id)
 
-    def get_cost(self):
-        return self.price * self.quantity
+    def clean(self):
+        products = Product.objects.filter(order_items=self)
+        print(products)
+

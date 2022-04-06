@@ -13,6 +13,8 @@ router.register('news', views.NewsListView)
 router.register('products',views.ProductsListView)
 router.register('public', views.PublicOfferListView)
 router.register('slider', views.SliderListView)
+router.register('site', views.ReturnCallListView)
+
 
 
 urlpatterns = [
@@ -25,8 +27,9 @@ urlpatterns = [
     path('footer/', footer),
     path('hit_of_sales/', hit_of_sales),
     path('new/', new),
-    path('collection/', collection),
+    path('collections/<id>', collection),
     path('advantages/', advantages),
+    path('favorite/', favorite),
     # path('similar_products/<int:pk>/', SimilarListView.as_view(), name="similar-list"),
 
     # path('news/', views.NewsListView.as_view(), name="news-list"),

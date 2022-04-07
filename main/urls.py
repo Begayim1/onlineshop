@@ -30,6 +30,7 @@ urlpatterns = [
     path('collections/<id>', collection),
     path('advantages/', advantages),
     path('favorite/', favorite),
+    path('product_search', product_search),
     # path('similar_products/<int:pk>/', SimilarListView.as_view(), name="similar-list"),
 
     # path('news/', views.NewsListView.as_view(), name="news-list"),

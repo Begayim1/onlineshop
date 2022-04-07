@@ -11,8 +11,7 @@ class Order(models.Model):
     address = models.TextField()
     city = models.CharField(max_length=100)
     email = models.EmailField()
-    created_at = models.DateTimeField(auto_now_add=True, null=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(verbose_name='Data', auto_now_add=True)
 
 
 

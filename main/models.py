@@ -1,3 +1,5 @@
+import time
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from colorful.fields import RGBColorField
@@ -33,7 +35,6 @@ class Size(models.Model):
 class Product(models.Model):
     title = models.CharField(max_length=100)  # название
     description = RichTextField(blank=True, null=True, max_length=800)  # описание
-    # created = models.DateTimeField(default=True)  # хранит дату когда был создан объект.
     article = models.CharField(max_length=55)  # артикл
     fabric = models.CharField(max_length=55, )  # cостав ткани
     material = models.CharField(max_length=55)  # материал
@@ -70,7 +71,7 @@ class Product(models.Model):
 class Color(models.Model):
     name = models.CharField(max_length=55)
     color = RGBColorField()
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Product', related_name='color')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Product', related_name='color', null=True)
 
     def __str__(self):
         return self.name
@@ -168,32 +169,30 @@ class Slider(models.Model):
 
 
 # """Футер"""
-class Type(models.Model):
-    name = models.CharField(max_length=55, unique=True)
-
-    def __str__(self):
-        return self.name
-
-
 class Footer(models.Model):
+    SITE = (
+        ('WhatsApp', 'WhatsApp'),
+        ('Telegram', 'Telegram'),
+        ('Instagram', 'Instagram'),
+        ('Mail', 'Mail')
+    )
     logo = models.ImageField(upload_to='images_f')
-    logo = models.ImageField(null=True, blank=True, upload_to='image_h')
+    logo_h = models.ImageField(null=True, blank=True, upload_to='image_h')
     description = models.TextField(max_length=200)
-    num = models.PositiveIntegerField()
-    type = models.ForeignKey(Type, on_delete=models.DO_NOTHING)
-    link = models.URLField(max_length=150, null=True, blank=True)
-    number = models.PositiveIntegerField()
-    message = models.CharField(max_length=55, null=True, blank=True)
+    num = models.CharField(max_length=55)
+    type = models.CharField(choices=SITE, max_length=55)
+    link_num = models.CharField(max_length=150, null=True, blank=True)
+    account = models.CharField(max_length=55, null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        if self.type.name == 'WhatsApp':
-            self.link = f'https://wa.me/{self.number}/'
-        elif self.type.name == 'Telegram':
-            self.link = f'https://t.me/{self.number}/'
-        elif self.type.name == 'Instagram':
-            self.link = f'https://www.instagram.com/{self.message}/'
-        elif self.type.name == 'Mail':
-            self.link = f'https://mail.google.com/{self.message}/'
+        if self.type == 'WhatsApp':
+            self.link_num = f'https://wa.me/{self.link_num}/'
+        elif self.type == 'Telegram':
+            self.account = f'https://t.me/{self.account}/'
+        elif self.type == 'Instagram':
+            self.account = f'https://www.instagram.com/{self.account}/'
+        elif self.type == 'Mail':
+            self.account = f'https://mail.google.com/{self.account}/'
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -228,6 +227,9 @@ class ReturnCall(models.Model):
 class ListOfReferences(models.Model):
     name = models.CharField(max_length=55)
     num = models.CharField(max_length=55)
-    created_at = models.DateTimeField(verbose_name='Data', auto_created=True)
+    created_at = models.DateTimeField(verbose_name='Data', auto_now=True)
     return_call = models.BooleanField(default=True)
     call = models.BooleanField(default=True)
+
+
+# random_prod = Product.objects.order_by('?')[:4]

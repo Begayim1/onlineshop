@@ -99,7 +99,7 @@ class FooterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Footer
-        fields = ('logo', 'description', 'num', 'type', 'number', 'message')
+        fields = ('logo', 'description', 'num', 'logo_h', 'type', 'link_num', 'account',)
 
 class SliderSerializer(serializers.ModelSerializer):
     class Meta:

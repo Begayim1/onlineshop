@@ -109,24 +109,24 @@ def advantages(request):
     serializer = AdvantagesSerializers(queryset, many=True)
     return Response(serializer.data)
 
-# @api_view(['GET'])
-# def product_search(request):
-#     obj = []
-#     number = models.Category.objects.all().count()
-#     if number >= 5:
-#         for i in models.Category.objects.all().values_list('id')[0:5]:
-#             if models.Product.objects.all().filter(category=i).first() is None:
-#                 pass
-#             else:
-#                 obj.append(models.Product.objects.all().filter(category=i).first())
-#     else:
-#         for i in models.Category.objects.all().values_list('id')[0:number]:
-#             if models.Product.objects.all().filter(category=i).first() is None:
-#                 pass
-#             else:
-#                 obj.append(models.Product.objects.all().filter(category=i).first())
-#     serializer = serializers.ProductSerializer(obj, many=True)
-#     return Response(serializer.data)
+@api_view(['GET'])
+def product_search(request):
+    obj = []
+    number = Category.objects.all().count()
+    if number >= 5:
+        for i in Category.objects.all().values_list('id')[0:5]:
+            if Product.objects.all().filter(category=i).first() is None:
+                pass
+            else:
+                obj.append(Product.objects.all().filter(category=i).first())
+    else:
+        for i in Category.objects.all().values_list('id')[0:number]:
+            if Product.objects.all().filter(category=i).first() is None:
+                pass
+            else:
+                obj.append(Product.objects.all().filter(category=i).first())
+    serializer = ProductSerializer(obj, many=True)
+    return Response(serializer.data)
 
 """избранное"""
 @api_view(['GET'])

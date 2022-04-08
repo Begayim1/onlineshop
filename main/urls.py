@@ -2,10 +2,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+
+import order.views
 from . import views
 from rest_framework.routers import DefaultRouter
 
 from .views import *
+from order.views import *
 
 router = DefaultRouter()
 router.register('collection', views.CollectionListView)
@@ -14,6 +17,8 @@ router.register('products',views.ProductsListView)
 router.register('public', views.PublicOfferListView)
 router.register('slider', views.SliderListView)
 router.register('site', views.ReturnCallListView)
+router.register('order', order.views.OrderListView)
+
 
 
 
@@ -31,6 +36,7 @@ urlpatterns = [
     path('advantages/', advantages),
     path('favorite/', favorite),
     path('product_search', product_search),
+
     # path('similar_products/<int:pk>/', SimilarListView.as_view(), name="similar-list"),
 
     # path('news/', views.NewsListView.as_view(), name="news-list"),

@@ -9,8 +9,8 @@ from rest_framework.response import Response
 from  rest_framework import filters
 
 class MyPaginationClass(PageNumberPagination):
-    page_size = 2
-    max_page_size = 3
+    page_size = 8
+    max_page_size = 5
 
 # """Товары"""
 

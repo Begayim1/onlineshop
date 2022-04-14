@@ -6,10 +6,14 @@ from colorful.fields import RGBColorField
 from ckeditor.fields import RichTextField
 
 
-# """Товары"""
+
+
+''' Товары '''
+
 
 class Category(models.Model):
-    name = models.CharField(max_length=55, unique=True)
+    name = models.CharField(max_length=55,
+                            unique=True)
     image = models.ImageField()
 
     class Meta:
@@ -34,17 +38,22 @@ class Size(models.Model):
 
 class Product(models.Model):
     title = models.CharField(max_length=100)  # название
-    description = RichTextField(blank=True, null=True, max_length=800)  # описание
+    description = RichTextField(blank=True,
+                                null=True,
+                                max_length=800)  # описание
     article = models.CharField(max_length=55)  # артикл
     fabric = models.CharField(max_length=55, )  # cостав ткани
     material = models.CharField(max_length=55)  # материал
-    quantity_in_line = models.PositiveSmallIntegerField(default=0)  # количество в линейке
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    old_price = models.PositiveIntegerField(null=True, blank=True)  # старая цена
-    discount = models.IntegerField(null=True, blank=True)
+    quantity_in_line = models.PositiveSmallIntegerField(default=1)  # количество в линейке
+    price = models.DecimalField(max_digits=10,
+                                decimal_places=2)
+    old_price = models.PositiveIntegerField(null=True,
+                                            blank=True)  # старая цена
+    discount = models.IntegerField(null=True,
+                                   blank=True)
     size = models.ManyToManyField(Size, verbose_name=Size)
-    # color = models.ManyToManyField(Color, verbose_name=Color, related_name='product')
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE,
+                                 null=True, blank=True)
     hit_of_sales = models.BooleanField(default=False)  # хит продаж
     new = models.BooleanField(default=True)  # новинки
     favorite = models.BooleanField(default=True)
@@ -71,7 +80,11 @@ class Product(models.Model):
 class Color(models.Model):
     name = models.CharField(max_length=55)
     color = RGBColorField()
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Product', related_name='color', null=True)
+    product = models.ForeignKey(Product,
+                                on_delete=models.CASCADE,
+                                verbose_name='Product',
+                                related_name='color',
+                                null=True)
 
     def __str__(self):
         return self.name
@@ -79,9 +92,12 @@ class Color(models.Model):
 
 class Image(models.Model):
     image = models.ImageField()
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Product', related_name='image')
+    product = models.ForeignKey(Product,
+                                on_delete=models.CASCADE,
+                                verbose_name='Product',
+                                related_name='image')
 
-    # """ О нас"""""
+    ''' О нас '''
 
 
 class AboutUs(models.Model):
@@ -100,7 +116,7 @@ class ImageUs(models.Model):
     image = models.ImageField()
     about_us = models.ForeignKey(AboutUs, on_delete=models.CASCADE, related_name='image')
 
-    # """"Коллекция"""
+    ''' Коллекция '''
 
 
 class Collection(models.Model):
@@ -114,7 +130,7 @@ class Collection(models.Model):
     def __str__(self):
         return self.name
 
-        # """ Новости """
+    ''' Новости '''
 
 
 class News(models.Model):
@@ -125,8 +141,10 @@ class News(models.Model):
     def __str__(self):
         return self.name
 
+    ''' 
+    Наши преимущества 
+    '''
 
-# """Наши преимущества"""
 
 class Advantages(models.Model):
     name = models.CharField(max_length=55)
@@ -136,8 +154,10 @@ class Advantages(models.Model):
     def __str__(self):
         return self.name
 
+    ''' 
+    Публичная оферта 
+    '''
 
-# """Публичная оферта"""
 
 class PublicOffer(models.Model):
     name = models.CharField(max_length=55)
@@ -146,8 +166,8 @@ class PublicOffer(models.Model):
     def __str__(self):
         return self.name
 
+    ''' Помощь '''
 
-# """Помощь"""
 
 class Help(models.Model):
     question = models.CharField(max_length=55)
@@ -161,14 +181,18 @@ class ImageHelp(models.Model):
     image = models.ImageField()
     help = models.ForeignKey(Help, on_delete=models.CASCADE, related_name='image')
 
+    ''' 
+    гл стр слайдер 
+    '''
 
-# """гл стр слайдер"""
+
 class Slider(models.Model):
     image = models.ImageField(upload_to='images')
     link = models.URLField(blank=True)
 
+    ''' Футер '''
 
-# """Футер"""
+
 class Footer(models.Model):
     SITE = (
         ('WhatsApp', 'WhatsApp'),
@@ -177,12 +201,16 @@ class Footer(models.Model):
         ('Mail', 'Mail')
     )
     logo = models.ImageField(upload_to='images_f')
-    logo_h = models.ImageField(null=True, blank=True, upload_to='image_h')
+    logo_h = models.ImageField(null=True, blank=True,
+                               upload_to='image_h')
     description = models.TextField(max_length=200)
     num = models.CharField(max_length=55)
-    type = models.CharField(choices=SITE, max_length=55)
-    link_num = models.CharField(max_length=150, null=True, blank=True)
-    account = models.CharField(max_length=55, null=True, blank=True)
+    type = models.CharField(choices=SITE,
+                            max_length=55)
+    link_num = models.CharField(max_length=150,
+                                null=True, blank=True)
+    account = models.CharField(max_length=55,
+                               null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if self.type == 'WhatsApp':
@@ -197,6 +225,10 @@ class Footer(models.Model):
 
     def __str__(self):
         return self.description
+
+    ''' 
+    Обратный званок 
+    '''
 
 
 class ReturnCall(models.Model):
@@ -223,6 +255,10 @@ class ReturnCall(models.Model):
     def __str__(self):
         return self.name
 
+    ''' 
+    Список обращений 
+    '''
+
 
 class ListOfReferences(models.Model):
     name = models.CharField(max_length=55)
@@ -232,4 +268,3 @@ class ListOfReferences(models.Model):
     call = models.BooleanField(default=True)
 
 
-# random_prod = Product.objects.order_by('?')[:4]

@@ -1,6 +1,50 @@
 from django.db import models
 
-from main.models import Product
+from main.models import *
+
+
+class Cart(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='cart_product', blank=True)
+    quantity = models.PositiveIntegerField(default=1)
+    price_q = models.IntegerField(null=True, blank=True, verbose_name='Cтоимость')# общ cумма
+    quan_sum = models.IntegerField(null=True, blank=True, verbose_name='Общ Количество:') # общ количест тов
+    rebate = models.IntegerField(null=True, blank=True, verbose_name='Скидка') #скидка общ
+    sum_r = models.IntegerField(null=True, blank=True, verbose_name='Итого') # общ сумма с учетом скидки
+
+
+
+
+    def save(self, *args, **kwargs):
+        self.price_q = self.product.old_price * self.quantity
+        self.quan_sum = self.product.quantity_in_line + self.quantity
+        self.rebate = (self.product.old_price - self.product.price) * self.quantity
+        self.sum_r = self.product.price * self.quantity
+        super().save(*args, **kwargs)
+
+
+class CartItem(models.Model):
+    cart = models.ManyToManyField(Cart, related_name='related_cart', blank=True)
+    price = models.IntegerField(null=True, blank=True, default=0 )
+    quantity = models.PositiveIntegerField(null=True, blank=True, default=0)
+    sum = models.IntegerField(null=True, blank=True, default=0)
+    sum_quantity = models.IntegerField(null=True, blank=True, default=0)
+    discounts = models.IntegerField(null=True, blank=True, default=0)
+    total = models.IntegerField(null=True, blank=True, default=0)
+
+
+    def save(self, *args, **kwargs):
+        if self.id:
+            self.quantity = sum([cproduct.quantity for cproduct in self.cart.all()])
+            self.sum_quantity = sum([c.quan_sum for c in self.cart.all()])
+            self.price = sum([c.price_q for c in self.cart.all()])
+            self.discounts = sum([c.rebate for c in self.cart.all()])
+            self.total = sum([c.sum_r for c in self.cart.all()])
+        super().save(*args, **kwargs)
+
+    def get_cost(self):
+        if self.id:
+            return self.price * self.quantity
+
 
 
 class Order(models.Model):
@@ -11,14 +55,16 @@ class Order(models.Model):
     )
     name = models.CharField(max_length=55)
     last_name = models.CharField(max_length=60)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='orders')
+    cart = models.ForeignKey(Cart,  on_delete=models.CASCADE, related_name='cart')
     phone = models.CharField(max_length=13)
     address = models.TextField()
     city = models.CharField(max_length=100)
     email = models.EmailField()
-    created_at = models.DateTimeField(verbose_name='Data', auto_now_add=True)
+    created_at = models.DateTimeField(verbose_name='Data', auto_now=True)
     status = models.CharField(choices=STATUS, max_length=55, null=True, default='New')
     description = models.CharField(max_length=55,null=True, blank=True)
+    cart = models.ManyToManyField(CartItem, related_name='items')
+
 
     def save(self, *args, **kwargs):
         if self.status == '':
@@ -30,7 +76,6 @@ class Order(models.Model):
         elif self.status == 'Cancelled':
             self.description = f'Product {self.status}'
         super().save(*args, **kwargs)
-
 
 
     class Meta:
@@ -45,14 +90,10 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='order_items')
-    price = models.DecimalField(max_digits=10, decimal_places=2,)
-    quantity = models.PositiveIntegerField(default=1)
+
 
     def __str__(self):
         return '{}'.format(self.id)
 
-    def clean(self):
-        products = Product.objects.filter(order_items=self)
-        print(products)
+
 

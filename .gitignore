@@ -135,6 +135,10 @@ GitHub.sublime-settings
 !.vscode/launch.json
 !.vscode/extensions.json
 .history
+
+.madia/
+.images/
+
 #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
 #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
 #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
@@ -143,3 +147,4 @@ GitHub.sublime-settings
 #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
 #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
 #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
+#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

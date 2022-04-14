@@ -1,6 +1,5 @@
 from django.contrib import admin
 from .models import *
-# from main.models import Gallery, Product
 
 admin.site.register(Category)
 admin.site.register(Color)
@@ -33,6 +32,7 @@ class ImageForPhoto(admin.TabularInline):
     max_num = 8
 
 
+
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'category')
     list_display_links = ('id', 'title')
@@ -46,13 +46,3 @@ class ProductAdmin(admin.ModelAdmin):
 
 admin.site.register(Product, ProductAdmin)
 
-
-# class GalleryInline(admin.TabularInline):
-#     fk_name = 'product'
-#     model = Gallery
-#
-#
-# @admin.register(Product)
-
-# class ProductAdmin(admin.ModelAdmin):
-#     inlines = [GalleryInline, ]

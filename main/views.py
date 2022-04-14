@@ -8,25 +8,33 @@ from .serializers import *
 from rest_framework.response import Response
 from  rest_framework import filters
 
+''' Пагинация '''
+
+
 class MyPaginationClass(PageNumberPagination):
     page_size = 8
     max_page_size = 5
 
-# """Товары"""
+    ''' Товары '''
+
 
 class ProductListView(APIView):
     def get(self, request):
         products = Product.objects.all()
-        serializer = ProductSerializer(products, many = True)
+        serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
 
 
-# """О нас"""
+    ''' О нас '''
+
+
 class AboutUsListView(APIView):
     def get(self, request):
         about_us = AboutUs.objects.all()
         serializer = AboutUsSerializer(about_us, many=True)
         return Response(serializer.data)
+
+    ''' Товары '''
 
 
 class ProductsListView(ModelViewSet):
@@ -37,19 +45,27 @@ class ProductsListView(ModelViewSet):
     search_fields = ['title']
 
 
-# """Колекции"""
+    ''' Коллекция '''
+
+
 class CollectionListView(ModelViewSet):
     serializer_class = CollectionSerializer
     queryset = Collection.objects.all()
     pagination_class = MyPaginationClass
 
-# """Новсти"""
+    ''' Новости '''
+
+
 class NewsListView(ModelViewSet):
     serializer_class = NewsSerializer
     queryset = News.objects.all()
     pagination_class = MyPaginationClass
 
-# """похожие продукты"""
+    ''' 
+    Похожие продукты 
+    '''
+
+
 @api_view(['GET'])
 def similar_product(request, pk):
     category = Category.objects.get(id=pk)
@@ -57,7 +73,12 @@ def similar_product(request, pk):
     serializer = ProductSerializer(queryset, many=True)
     return Response(serializer.data)
 
-# """Список товаров"""
+
+'''
+ Список товаров
+'''
+
+
 @api_view(['GET'])
 def list_product(request, pk):
     category = Category.objects.get(id=pk)
@@ -65,7 +86,12 @@ def list_product(request, pk):
     serializer = ProductSerializer(queryset, many=True)
     return Response(serializer.data)
 
-# """Новые Продукты со статусом"""
+
+'''
+ Новые Продукты со статусом
+'''
+
+
 @api_view(['GET'])
 def new_product(request, pk):
     category = Category.objects.get(id=pk)
@@ -73,14 +99,20 @@ def new_product(request, pk):
     serializer = ProductSerializer(queryset, many=True)
     return Response(serializer.data)
 
-# """Футер"""
+
+''' Футер '''
+
+
 @api_view(['GET'])
 def footer(request):
     obj = Footer.objects.all()
     serializer = FooterSerializer(obj, many=True)
     return Response(serializer.data)
 
-# """Глав стр Хит Продаж со стат"""
+
+''' Глав стр Хит Продаж со стат '''
+
+
 @api_view(['GET'])
 def hit_of_sales(request):
     queryset = Product.objects.all().filter(hit_of_sales=True)[0:8]
@@ -94,7 +126,10 @@ def new(request):
     serializer = ProductSerializer(queryset, many=True)
     return Response(serializer.data)
 
-# """Главная стр колекции"""
+
+''' Главная стр колекции'''
+
+
 @api_view(['GET'])
 def collection(request,id):
     queryset_cat = Category.objects.get(pk=id)
@@ -102,55 +137,55 @@ def collection(request,id):
     serializer = ProductSerializer(queryset, many=True)
     return Response(serializer.data)
 
-# """Главная стр преимущества"""
+
+''' Главная стр преимущества'''
+
+
 @api_view(['GET'])
 def advantages(request):
     queryset = Advantages.objects.all().filter()[0:4]
     serializer = AdvantagesSerializers(queryset, many=True)
     return Response(serializer.data)
 
-@api_view(['GET'])
-def product_search(request):
-    obj = []
-    number = Category.objects.all().count()
-    if number >= 5:
-        for i in Category.objects.all().values_list('id')[0:5]:
-            if Product.objects.all().filter(category=i).first() is None:
-                pass
-            else:
-                obj.append(Product.objects.all().filter(category=i).first())
-    else:
-        for i in Category.objects.all().values_list('id')[0:number]:
-            if Product.objects.all().filter(category=i).first() is None:
-                pass
-            else:
-                obj.append(Product.objects.all().filter(category=i).first())
-    serializer = ProductSerializer(obj, many=True)
-    return Response(serializer.data)
 
-"""избранное"""
+''' Избранное '''
+
+
 @api_view(['GET'])
 def favorite(request):
     queryset = Product.objects.all().filter(favorite=True)[0:12]
     serializer = ProductSerializer(queryset, many=True)
     return Response(serializer.data)
 
-# """гл стр слайдер"""
+
+''' гл стр слайдер '''
+
+
 class SliderListView(ModelViewSet):
     queryset = Slider.objects.all()
     serializer_class = SliderSerializer
 
-# """Публичная оферта"""
+
+''' Публичная оферта '''
+
+
 class PublicOfferListView(ModelViewSet):
     serializer_class = PublicOfferSerializer
     queryset = PublicOffer.objects.all()
 
-# """Помощь"""
+
+''' Помощь '''
+
+
 class HelpListView(APIView):
     def get(self, request):
         help = Help.objects.all()
         serializer_class = HelpSerializer(help, many=True)
         return Response(serializer_class.data)
+
+    ''' 
+    Обратный званок 
+    '''
 
 
 class ReturnCallListView(ModelViewSet):

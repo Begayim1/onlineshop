@@ -1,6 +1,10 @@
 from rest_framework import serializers
 
 from .models import *
+from order.serializers import *
+from order.models import *
+
+''' Товары '''
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -41,6 +45,8 @@ class ProductSerializer(serializers.ModelSerializer):
         discount = 100 - (obj.price * 100 // obj.old_price) if obj.old_price else 0
         return discount
 
+    ''' О нас '''
+
 
 class ImageUsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -55,15 +61,23 @@ class AboutUsSerializer(serializers.ModelSerializer):
         model = AboutUs
         fields = ('name', 'description', 'image',)
 
+    ''' Наши преимущества '''
+
+
 class AdvantagesSerializers(serializers.ModelSerializer):
     class Meta:
         model = Advantages
         fields = '__all__'
 
+    ''' Коллекция '''
+
+
 class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Collection
         fields = ('id', 'name', 'image',)
+
+    ''' Новости '''
 
 
 class NewsSerializer(serializers.ModelSerializer):
@@ -71,14 +85,18 @@ class NewsSerializer(serializers.ModelSerializer):
         model = News
         fields = ('id', 'name', 'description', 'image',)
 
+    ''' 
+    Публичная оферта 
+    '''
+
 
 class PublicOfferSerializer(serializers.ModelSerializer):
     class Meta:
         model = PublicOffer
         fields = '__all__'
 
+    ''' Помощь '''
 
-# """Помощь"""
 
 class ImageHelpSerializer(serializers.ModelSerializer):
     class Meta:
@@ -93,7 +111,8 @@ class HelpSerializer(serializers.ModelSerializer):
         model = Help
         fields = ('question', 'answer', 'image',)
 
-# """Футер"""
+    ''' Футер '''
+
 
 class FooterSerializer(serializers.ModelSerializer):
 
@@ -101,10 +120,20 @@ class FooterSerializer(serializers.ModelSerializer):
         model = Footer
         fields = ('logo', 'description', 'num', 'logo_h', 'type', 'link_num', 'account',)
 
+    ''' 
+    гл стр слайдер 
+    '''
+
+
 class SliderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Slider
         fields = '__all__'
+
+    ''' 
+    Обратный званок 
+    '''
+
 
 class ReturnCallSerializer(serializers.ModelSerializer):
     class Meta:

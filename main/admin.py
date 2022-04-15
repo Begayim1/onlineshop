@@ -19,18 +19,14 @@ admin.site.register(ReturnCall)
 admin.site.register(ListOfReferences)
 
 
-
-
-
-
 class ColorForPhoto(admin.TabularInline):
     model = Color
     max_num = 8
 
+
 class ImageForPhoto(admin.TabularInline):
     model = Image
     max_num = 8
-
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -43,6 +39,4 @@ class ProductAdmin(admin.ModelAdmin):
     ]
 
 
-
 admin.site.register(Product, ProductAdmin)
-

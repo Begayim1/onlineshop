@@ -1,3 +1,5 @@
+from random import random, choice
+
 from django.http import Http404
 from rest_framework.decorators import api_view, action
 from rest_framework.pagination import PageNumberPagination
@@ -6,7 +8,8 @@ from rest_framework.viewsets import ModelViewSet
 from .models import *
 from .serializers import *
 from rest_framework.response import Response
-from  rest_framework import filters
+from rest_framework import filters
+from .models import *
 
 ''' Пагинация '''
 
@@ -23,7 +26,6 @@ class ProductListView(APIView):
         products = Product.objects.all()
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
-
 
     ''' О нас '''
 
@@ -44,6 +46,15 @@ class ProductsListView(ModelViewSet):
     filter_backends = (filters.SearchFilter,)
     search_fields = ['title']
 
+    # items = list(Product.objects.all())
+    #
+    # # change 3 to how many random items you want
+    # random_items = random.sample(items, 3)
+    # # if you want only a single random item
+    # random_item = random.choice(items)
+
+    # def get_random(self):
+    #     return Category.objects.order_by("?").first()
 
     ''' Коллекция '''
 
@@ -119,6 +130,7 @@ def hit_of_sales(request):
     serializer = ProductSerializer(queryset, many=True)
     return Response(serializer.data)
 
+
 # """Глав стр Со статусом Новинки"""
 @api_view(['GET'])
 def new(request):
@@ -131,7 +143,7 @@ def new(request):
 
 
 @api_view(['GET'])
-def collection(request,id):
+def collection(request, id):
     queryset_cat = Category.objects.get(pk=id)
     queryset = Product.objects.all().filter(category=queryset_cat)[0:4]
     serializer = ProductSerializer(queryset, many=True)
@@ -155,6 +167,26 @@ def advantages(request):
 def favorite(request):
     queryset = Product.objects.all().filter(favorite=True)[0:12]
     serializer = ProductSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def product_search(request):
+    obj = []
+    number = Collection.objects.all().count()
+    if number >= 5:
+        for i in Collection.objects.all().values_list('id')[0:5]:
+            if Product.objects.order_by('?').filter(category_id=i).first is None:
+                pass
+            else:
+                obj.append(choice(Product.objects.order_by('?').filter(category_id=i)))
+    else:
+        for i in Collection.objects.all().values_list('id')[0:number]:
+            if Product.objects.order_by('id').filter(category_id=i).first() is None:
+                pass
+            else:
+                obj.append(choice(Product.objects.order_by('?').filter(category_id=i)))
+    serializer = ProductSerializer(obj, many=True)
     return Response(serializer.data)
 
 
@@ -191,7 +223,3 @@ class HelpListView(APIView):
 class ReturnCallListView(ModelViewSet):
     serializer_class = ReturnCallSerializer
     queryset = ReturnCall.objects.all()
-
-
-
-

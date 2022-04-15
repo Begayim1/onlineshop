@@ -4,7 +4,6 @@ from .models import *
 from main.serializers import ProductSerializer
 
 
-
 class OrderSerializer(serializers.ModelSerializer):
     product = ProductSerializer(read_only=True)
 
@@ -12,14 +11,22 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = '__all__'
 
+
+class ProductCart(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ('id', 'title', 'image', 'price', 'old_price', 'size', 'color')
+
+
 class CartSerializer(serializers.ModelSerializer):
-    product = ProductSerializer(read_only=True)
+    product = ProductCart()
+
     class Meta:
         model = Cart
         fields = '__all__'
 
-class CaetItemSerializer(serializers.ModelSerializer):
+
+class CartItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = CartItem
         fields = '__all__'
-

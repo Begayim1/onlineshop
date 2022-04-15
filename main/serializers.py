@@ -115,7 +115,6 @@ class HelpSerializer(serializers.ModelSerializer):
 
 
 class FooterSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Footer
         fields = ('logo', 'description', 'num', 'logo_h', 'type', 'link_num', 'account',)

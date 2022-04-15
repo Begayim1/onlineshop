@@ -5,9 +5,6 @@ from django.db import models
 from colorful.fields import RGBColorField
 from ckeditor.fields import RichTextField
 
-
-
-
 ''' Товары '''
 
 
@@ -266,5 +263,3 @@ class ListOfReferences(models.Model):
     created_at = models.DateTimeField(verbose_name='Data', auto_now=True)
     return_call = models.BooleanField(default=True)
     call = models.BooleanField(default=True)
-
-

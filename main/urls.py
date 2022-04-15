@@ -10,22 +10,16 @@ from rest_framework.routers import DefaultRouter
 from .views import *
 from order.views import *
 
-
-
 router = DefaultRouter()
 router.register('collection', views.CollectionListView)
 router.register('news', views.NewsListView)
-router.register('products',views.ProductsListView)
+router.register('products', views.ProductsListView)
 router.register('public', views.PublicOfferListView)
 router.register('slider', views.SliderListView)
 router.register('site', views.ReturnCallListView)
 router.register('order', order.views.OrderListView)
 router.register('cart', order.views.CartListView)
-router.register('cart/item', order.views.CartItemListView)
-
-
-
-
+router.register('cartitem', order.views.CartItemListView)
 
 urlpatterns = [
     path('product/', views.ProductListView.as_view(), name="products-list"),
@@ -40,8 +34,7 @@ urlpatterns = [
     path('collections/<id>', collection),
     path('advantages/', advantages),
     path('favorite/', favorite),
-
+    path('product_search', views.product_search),
 
     path('', include(router.urls))
 ]
-

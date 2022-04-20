@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'ckeditor',
-    'djoser',
+    'ckeditor_uploader',
+    # 'djoser',
 
     # my apps
     'main',
@@ -136,6 +137,7 @@ STATICFILES_DIRS = [STATIC_DIR]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+CKEDITOR_UPLOAD_PATH = "uploads/"
 # CART_SESSION_ID = 'cart'
 
 # REST_FRAMEWORK = {

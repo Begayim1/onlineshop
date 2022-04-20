@@ -1,3 +1,4 @@
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
 from rest_framework import serializers
 
 from .models import *
@@ -19,10 +20,6 @@ class ColorSerializer(serializers.ModelSerializer):
         fields = ('name', 'color')
 
 
-class SizeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Size
-        fields = ('size',)
 
 
 class ImageSerializer(serializers.ModelSerializer):
@@ -32,9 +29,8 @@ class ImageSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    image = ImageSerializer(read_only=True, many=True)
-    color = ColorSerializer(read_only=True, many=True)
-    size = SizeSerializer(read_only=True, many=True)
+    color = ColorSerializer(many=True)
+    image = ImageSerializer(many=True)
     discount = serializers.SerializerMethodField()
 
     class Meta:
@@ -69,13 +65,7 @@ class AdvantagesSerializers(serializers.ModelSerializer):
         model = Advantages
         fields = '__all__'
 
-    ''' Коллекция '''
 
-
-class CollectionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Collection
-        fields = ('id', 'name', 'image',)
 
     ''' Новости '''
 
@@ -103,10 +93,8 @@ class ImageHelpSerializer(serializers.ModelSerializer):
         model = ImageHelp
         fields = ('image',)
 
-
 class HelpSerializer(serializers.ModelSerializer):
     image = ImageHelpSerializer(read_only=True, many=True)
-
     class Meta:
         model = Help
         fields = ('question', 'answer', 'image',)
@@ -117,7 +105,7 @@ class HelpSerializer(serializers.ModelSerializer):
 class FooterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Footer
-        fields = ('logo', 'description', 'num', 'logo_h', 'type', 'link_num', 'account',)
+        fields = '__all__'
 
     ''' 
     гл стр слайдер 
@@ -134,7 +122,7 @@ class SliderSerializer(serializers.ModelSerializer):
     '''
 
 
-class ReturnCallSerializer(serializers.ModelSerializer):
+class ListOfSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ReturnCall
-        fields = ('status', 'num_user')
+        model = ListOfReferences
+        fields = '__all__'

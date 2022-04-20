@@ -12,10 +12,10 @@ class Cart(models.Model):
     sum_r = models.IntegerField(default=True, null=True, blank=True, verbose_name='Итого')
 
     def save(self, *args, **kwargs):
-        self.price_q = self.product.old_price * self.quan_sum
+        self.price_q = self.product.old_price * self.quantity
         self.quan_sum = self.product.quantity_in_line * self.quantity
-        self.rebate = (self.product.old_price - self.product.price) * self.quan_sum
-        self.sum_r = self.product.price * self.quan_sum
+        self.rebate = (self.product.old_price - self.product.price) * self.quantity
+        self.sum_r = self.product.price * self.quantity
         super().save(*args, **kwargs)
 
 
@@ -23,7 +23,6 @@ class CartItem(models.Model):
     cart = models.ManyToManyField(Cart, related_name='related_cart', blank=True)
     price = models.IntegerField(null=True, blank=True, default=0)
     quantity = models.PositiveIntegerField(null=True, blank=True, default=0)
-    sum = models.IntegerField(null=True, blank=True, default=0)
     sum_quantity = models.IntegerField(null=True, blank=True, default=0)
     discounts = models.IntegerField(null=True, blank=True, default=0)
     total = models.IntegerField(null=True, blank=True, default=0)

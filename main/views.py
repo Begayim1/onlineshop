@@ -8,7 +8,7 @@ from rest_framework.viewsets import ModelViewSet
 from .models import *
 from .serializers import *
 from rest_framework.response import Response
-from rest_framework import filters
+from rest_framework import filters, status
 from .models import *
 
 ''' Пагинация '''
@@ -18,14 +18,7 @@ class MyPaginationClass(PageNumberPagination):
     page_size = 8
     max_page_size = 5
 
-    ''' Товары '''
 
-
-class ProductListView(APIView):
-    def get(self, request):
-        products = Product.objects.all()
-        serializer = ProductSerializer(products, many=True)
-        return Response(serializer.data)
 
     ''' О нас '''
 
@@ -36,6 +29,11 @@ class AboutUsListView(APIView):
         serializer = AboutUsSerializer(about_us, many=True)
         return Response(serializer.data)
 
+
+class ColorListView(ModelViewSet):
+    serializer_class = ColorSerializer
+    queryset = Color.objects.all()
+
     ''' Товары '''
 
 
@@ -45,24 +43,6 @@ class ProductsListView(ModelViewSet):
     pagination_class = MyPaginationClass
     filter_backends = (filters.SearchFilter,)
     search_fields = ['title']
-
-    # items = list(Product.objects.all())
-    #
-    # # change 3 to how many random items you want
-    # random_items = random.sample(items, 3)
-    # # if you want only a single random item
-    # random_item = random.choice(items)
-
-    # def get_random(self):
-    #     return Category.objects.order_by("?").first()
-
-    ''' Коллекция '''
-
-
-class CollectionListView(ModelViewSet):
-    serializer_class = CollectionSerializer
-    queryset = Collection.objects.all()
-    pagination_class = MyPaginationClass
 
     ''' Новости '''
 
@@ -121,6 +101,14 @@ def footer(request):
     return Response(serializer.data)
 
 
+@api_view(['GET'])
+def footer(request):
+    if request.method == 'GET':
+        queryset = Footer.objects.all()
+        serializer = FooterSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
 ''' Глав стр Хит Продаж со стат '''
 
 
@@ -131,21 +119,12 @@ def hit_of_sales(request):
     return Response(serializer.data)
 
 
-# """Глав стр Со статусом Новинки"""
+"""Глав стр Со статусом Новинки"""
+
+
 @api_view(['GET'])
 def new(request):
     queryset = Product.objects.all().filter(new=True)[0:4]
-    serializer = ProductSerializer(queryset, many=True)
-    return Response(serializer.data)
-
-
-''' Главная стр колекции'''
-
-
-@api_view(['GET'])
-def collection(request, id):
-    queryset_cat = Category.objects.get(pk=id)
-    queryset = Product.objects.all().filter(category=queryset_cat)[0:4]
     serializer = ProductSerializer(queryset, many=True)
     return Response(serializer.data)
 
@@ -173,15 +152,15 @@ def favorite(request):
 @api_view(['GET'])
 def product_search(request):
     obj = []
-    number = Collection.objects.all().count()
+    number = Category.objects.all().count()
     if number >= 5:
-        for i in Collection.objects.all().values_list('id')[0:5]:
+        for i in Category.objects.all().values_list('id')[0:5]:
             if Product.objects.order_by('?').filter(category_id=i).first is None:
                 pass
             else:
                 obj.append(choice(Product.objects.order_by('?').filter(category_id=i)))
     else:
-        for i in Collection.objects.all().values_list('id')[0:number]:
+        for i in Category.objects.all().values_list('id')[0:number]:
             if Product.objects.order_by('id').filter(category_id=i).first() is None:
                 pass
             else:
@@ -201,25 +180,25 @@ class SliderListView(ModelViewSet):
 ''' Публичная оферта '''
 
 
-class PublicOfferListView(ModelViewSet):
-    serializer_class = PublicOfferSerializer
+@api_view(['GET'])
+def public_offer(request):
     queryset = PublicOffer.objects.all()
+    serializer = PublicOfferSerializer(queryset, many=True)
+    return Response(serializer.data)
 
 
 ''' Помощь '''
 
 
-class HelpListView(APIView):
-    def get(self, request):
-        help = Help.objects.all()
-        serializer_class = HelpSerializer(help, many=True)
-        return Response(serializer_class.data)
+class HelpListView(ModelViewSet):
+    serializer_class = HelpSerializer
+    queryset = Help.objects.all()
 
     ''' 
     Обратный званок 
     '''
 
 
-class ReturnCallListView(ModelViewSet):
-    serializer_class = ReturnCallSerializer
-    queryset = ReturnCall.objects.all()
+class ListListView(ModelViewSet):
+    serializer_class = ListOfSerializer
+    queryset = ListOfReferences.objects.all()

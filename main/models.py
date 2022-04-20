@@ -22,15 +22,6 @@ class Category(models.Model):
         return self.name
 
 
-class Size(models.Model):
-    size = models.CharField(max_length=20)
-
-    class Meta:
-        verbose_name = 'Size'
-        verbose_name_plural = 'Sizes'
-
-    def __str__(self):
-        return self.size
 
 
 class Product(models.Model):
@@ -48,7 +39,7 @@ class Product(models.Model):
                                             blank=True)  # старая цена
     discount = models.IntegerField(null=True,
                                    blank=True)
-    size = models.ManyToManyField(Size, verbose_name=Size)
+    size_for_product = models.CharField(max_length=55, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE,
                                  null=True, blank=True)
     hit_of_sales = models.BooleanField(default=False)  # хит продаж
@@ -113,19 +104,7 @@ class ImageUs(models.Model):
     image = models.ImageField()
     about_us = models.ForeignKey(AboutUs, on_delete=models.CASCADE, related_name='image')
 
-    ''' Коллекция '''
 
-
-class Collection(models.Model):
-    name = models.CharField(max_length=55)
-    image = models.ImageField(upload_to='images/Y%/M%/H%', null=False)
-
-    class Meta:
-        verbose_name = 'Collection'
-        verbose_name_plural = 'Collections'
-
-    def __str__(self):
-        return self.name
 
     ''' Новости '''
 
@@ -173,10 +152,9 @@ class Help(models.Model):
     def __str__(self):
         return self.question
 
-
 class ImageHelp(models.Model):
     image = models.ImageField()
-    help = models.ForeignKey(Help, on_delete=models.CASCADE, related_name='image')
+
 
     ''' 
     гл стр слайдер 
@@ -191,66 +169,32 @@ class Slider(models.Model):
 
 
 class Footer(models.Model):
-    SITE = (
-        ('WhatsApp', 'WhatsApp'),
-        ('Telegram', 'Telegram'),
-        ('Instagram', 'Instagram'),
-        ('Mail', 'Mail')
-    )
+
     logo = models.ImageField(upload_to='images_f')
     logo_h = models.ImageField(null=True, blank=True,
                                upload_to='image_h')
     description = models.TextField(max_length=200)
     num = models.CharField(max_length=55)
-    type = models.CharField(choices=SITE,
-                            max_length=55)
-    link_num = models.CharField(max_length=150,
+    link_w = models.CharField(max_length=150,
                                 null=True, blank=True)
-    account = models.CharField(max_length=55,
+    account_t = models.CharField(max_length=55,
                                null=True, blank=True)
+    account_in = models.CharField(max_length=55,
+                                 null=True, blank=True)
+    email = models.CharField(max_length=55,
+                             null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        if self.type == 'WhatsApp':
-            self.link_num = f'https://wa.me/{self.link_num}/'
-        elif self.type == 'Telegram':
-            self.account = f'https://t.me/{self.account}/'
-        elif self.type == 'Instagram':
-            self.account = f'https://www.instagram.com/{self.account}/'
-        elif self.type == 'Mail':
-            self.account = f'https://mail.google.com/{self.account}/'
+
+        self.link_num = f'https://wa.me/{self.link_w}/'
+        self.account = f'https://t.me/{self.account_t}/'
+        self.account = f'https://www.instagram.com/{self.account_in}/'
+        self.account = f'https://mail.google.com/{self.email}/'
         super().save(*args, **kwargs)
 
     def __str__(self):
         return self.description
 
-    ''' 
-    Обратный званок 
-    '''
-
-
-class ReturnCall(models.Model):
-    LINK = (
-        ('Whatsapp', 'Whatsapp'),
-        ('Telegram', 'Telegram'),
-        ('Number', 'Number'),
-    )
-
-    status = models.CharField(choices=LINK, max_length=55)
-    name = models.CharField(max_length=55)
-    num_user = models.CharField(max_length=55)
-    return_call = models.BooleanField(default=True)
-
-    def save(self, *args, **kwargs):
-        if self.status == 'Whatsapp':
-            self.num_user = f'https://wa.me/{self.num_user}/'
-        elif self.status == 'Telegram':
-            self.num_user = f'https://t.me/{self.num_user}/'
-        elif self.status == 'Number':
-            self.num_user = f'+996{self.num_user}/'
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return self.name
 
     ''' 
     Список обращений 
@@ -258,8 +202,13 @@ class ReturnCall(models.Model):
 
 
 class ListOfReferences(models.Model):
+    Coll = (
+        ('Yes', 'Yes'),
+        ('No', 'No')
+    )
     name = models.CharField(max_length=55)
     num = models.CharField(max_length=55)
-    created_at = models.DateTimeField(verbose_name='Data', auto_now=True)
-    return_call = models.BooleanField(default=True)
-    call = models.BooleanField(default=True)
+    type = models.CharField(max_length=55, null=True, blank=True, verbose_name='Тип Обращения')
+    date = models.DateTimeField(editable=True, auto_now_add=True)
+    return_call = models.CharField(choices=Coll, max_length=55, default='No')
+

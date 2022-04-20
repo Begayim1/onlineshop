@@ -29,5 +29,3 @@ class CartItemListView(ModelViewSet):
         self.rebate = (self.product.old_price - self.product.price) * self.quan_sum
         self.sum_r = self.product.price * self.quan_sum
         super().save(*args, **kwargs)
-
-

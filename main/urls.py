@@ -8,30 +8,29 @@ from . import views
 from rest_framework.routers import DefaultRouter
 
 from .views import *
-from order.views import *
+
 
 router = DefaultRouter()
-router.register('collection', views.CollectionListView)
 router.register('news', views.NewsListView)
 router.register('products', views.ProductsListView)
-router.register('public', views.PublicOfferListView)
+router.register('help', views.HelpListView)
 router.register('slider', views.SliderListView)
-router.register('site', views.ReturnCallListView)
+router.register('color', views.ColorListView)
 router.register('order', order.views.OrderListView)
 router.register('cart', order.views.CartListView)
 router.register('cartitem', order.views.CartItemListView)
 
+
+
 urlpatterns = [
-    path('product/', views.ProductListView.as_view(), name="products-list"),
-    path('about/', views.AboutUsListView.as_view(), name="about_us-list"),
-    path('help/', views.HelpListView.as_view(), name="help-list"),
+    path('aboutus/', views.AboutUsListView.as_view(), name="aboutus-list"),
     path('similar_product/<pk>/', similar_product),
     path('list_product/<pk>/', list_product),
     path('new_product/<pk>/', new_product),
-    path('footer/', footer),
     path('hit_of_sales/', hit_of_sales),
     path('new/', new),
-    path('collections/<id>', collection),
+    path('footer', footer),
+    path('public_offer', public_offer),
     path('advantages/', advantages),
     path('favorite/', favorite),
     path('product_search', views.product_search),
